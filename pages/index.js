@@ -71,7 +71,7 @@ export default function HomePage() {
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           //backgroundColor: appConfig.theme.colors.primary[500],
-          backgroundImage: 'url(https://images2.imgbox.com/4e/eb/7speewVn_o.jpg)',
+          backgroundImage: 'url(https://images2.imgbox.com/01/72/SWtucoDo_o.png)',
           backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
           height: '100%',
         }}
