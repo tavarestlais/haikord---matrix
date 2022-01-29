@@ -1,35 +1,9 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
-
-
-function GlobalStyle(){
-  return (
-    <style global jsx>{`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Montserrat', sans-serif;
-      }
-     
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */ 
-    `}</style>
-  );
-}
+import { useEffect, useState } from 'react';
+import React from 'react';
+import { useRouter } from 'next/router'
+import { route } from 'next/dist/server/router';
 
 
 function Title(props) {
@@ -48,25 +22,15 @@ function Title(props) {
   );
 }
 
-// Componente React
-// function HomePage() {
-//     // JSX
-//     return (
-//         <div>
-//             <GlobalStyle />
-//             <Titulo tag="h2">Boas vindas de volta!</Titulo>
-//             <h2>Siga nosso perfil</h2>
-//         </div>
-//     )
-// }
-// export default HomePage
-
 export default function HomePage() {
-  const username = 'haikoeamigos';
+  //const username = 'haikoeamigos';
+  const [username, setUsername] = React.useState('haikoeamigos');
+  const roteamento = useRouter();
+  const [alert, setAlert] = useState(false);
+
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -94,6 +58,16 @@ export default function HomePage() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={function (event){
+                event.preventDefault();
+                //window.location.href = '/chat'
+                if(username.length > 2){
+                  roteamento.push('/chat');
+                }else{
+                  setAlert(true);
+                }
+              }
+            }
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -104,7 +78,26 @@ export default function HomePage() {
               {appConfig.name}
             </Text>
 
+            {/* <input 
+              type='text'
+              value={username}
+              onChange={function Handler (event) {
+                console.log('usuário digitou', event.target.value);
+                const fieldValue = event.target.value;
+                setUsername(fieldValue);
+                }
+              }
+            /> */}
+            
+
             <TextField
+              value={username}
+              onChange={function Handler (event) {
+                console.log('usuário digitou', event.target.value);
+                  const fieldValue = event.target.value;
+                  setUsername(fieldValue);
+                }
+              }
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -126,6 +119,20 @@ export default function HomePage() {
                 mainColorStrong: appConfig.theme.colors.primary[600],
               }}
             />
+
+            {alert && (
+              <Box as="p"
+                styleSheet={{
+                  position: 'relative',
+                  MarginTop: '10px',
+                  bottom: '18%',
+                  left: '5%',
+                  fontSize:'12px',
+                  color: appConfig.theme.colors.neutrals["900"],
+                }}>
+                {(username.length > 0 && username.length <= 2)  ? 'Quantidade de caracteres inválida.' : ''}
+              </Box>
+            )}
           </Box>
           {/* Formulário */}
 
@@ -152,16 +159,19 @@ export default function HomePage() {
                 border: '2px solid',
                 borderColor: appConfig.theme.colors.neutrals[999],
                 marginBottom: '16px',
+                display: username.length > 2 ? 'block' : 'none'
               }}
               src={`https://images2.imgbox.com/6b/7c/k80fBQ5U_o.png`}
-            />
+              //src={`https://github.com/{username}.png`}
+              />
             <Text
               variant="body4"
               styleSheet={{
                 color: appConfig.theme.colors.neutrals[200],
                 backgroundColor: appConfig.theme.colors.neutrals[900],
                 padding: '3px 10px',
-                borderRadius: '1000px'
+                borderRadius: '1000px',
+                display: username.length > 2 ? 'block' : 'none'
               }}
             >
               {username}
